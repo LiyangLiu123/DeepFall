@@ -1,3 +1,2 @@
 # DeepFall
-
-# On NTU skeleton data
+On NTU skeleton data
