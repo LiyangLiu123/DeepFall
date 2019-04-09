@@ -16,10 +16,6 @@ class SkeletonDataset(Dataset):
             num_frames = int(lines[0])
             lines = np.delete(lines, 0)
 
-            # skip the files with multiple skeletons detected
-            if int(lines[0]) is not 1:
-                continue
-
             sub_length = int(num_frames / 20)
             idx = 0
             # 25 joints for each frame, each joint have 11 number
@@ -30,10 +26,16 @@ class SkeletonDataset(Dataset):
             for i in range(20):
                 if i < num_frames - 20 * sub_length:
                     chosen = random.randint(idx, idx+sub_length+1)
-                    if int(lines[chosen*28+2]) is not 25:
-                        print(filename)
-                        print(chosen)
-                        print(int(lines[chosen*28+2]))
+                    k = 0
+                    while k < chosen:
+                        num_bodies = int(lines[k])
+                        print()
+                        if num_bodies is not 1 and k is not 0:
+                            print(filename)
+                            print(k)
+                            print(int(lines[k]))
+                        k += num_bodies*26+2
+
                     # one frame contains 28 lines in the file
                     # start from the 3rd line of each frame
                     for j in range(25):
@@ -43,9 +45,9 @@ class SkeletonDataset(Dataset):
                             #print(chosen)
                             #print(j)
                             #print(numbers)
-                            #print(lines[chosen*28+3+j])
-                            print("hehe")
-                        packet[j, :, i] = torch.Tensor(numbers)
+                            #print(lines[chosen*28+3+j+1])
+                            print("")
+                        #packet[j, :, i] = torch.Tensor(numbers)
                     #print(packet)
                     #print(i)
                     idx += sub_length + 1
