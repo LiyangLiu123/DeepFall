@@ -1,17 +1,57 @@
 from __future__ import print_function, division
 import torch
-import pandas as pd
-import csv
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
+import os
+import random
 
 
 class SkeletonDataset(Dataset):
 
-    def __init__(self, csv_file, transform=None):
-        with open(csv_file, 'rb') as csvfile:
-            self.landmarks_frame = list(csv.reader(csvfile))
-        self.landmarks_frame = np.delete(self.landmarks_frame, 0, 0)
+    def __init__(self, path, transform=None):
+        self.data = []
+        for filename in os.listdir(path):
+            file = open(path+filename, 'r')
+            lines = file.readlines()
+            num_frames = int(lines[0])
+            lines = np.delete(lines, 0)
+
+            # skip the files with multiple skeletons detected
+            if int(lines[0]) is not 1:
+                continue
+
+            sub_length = int(num_frames / 20)
+            idx = 0
+            # 25 joints for each frame, each joint have 11 number
+            packet = torch.Tensor(25, 11, 20)
+
+            # divide the frames in 20 sub-sequences with almost the same length (sub_length+1 or sub_length)
+            # and choose one frame randomly form each sub-sequence
+            for i in range(20):
+                if i < num_frames - 20 * sub_length:
+                    chosen = random.randint(idx, idx+sub_length+1)
+                    if int(lines[chosen*28+2]) is not 25:
+                        print(filename)
+                        print(chosen)
+                        print(int(lines[chosen*28+2]))
+                    # one frame contains 28 lines in the file
+                    # start from the 3rd line of each frame
+                    for j in range(25):
+                        numbers = list(map(float, lines[chosen*28+3+j].split(' ')[:-1]))
+                        if len(numbers) is not 11:
+                            #print(filename)
+                            #print(chosen)
+                            #print(j)
+                            #print(numbers)
+                            #print(lines[chosen*28+3+j])
+                            print("haha")
+                        packet[j, :, i] = torch.Tensor(numbers)
+                    #print(packet)
+                    #print(i)
+                    idx += sub_length + 1
+                else:
+                    idx += sub_length
+
         self.transform = transform
 
     def __len__(self):
@@ -29,14 +69,11 @@ class SkeletonDataset(Dataset):
 
 
 def main():
-    # csv = pd.read_csv('Fall20_Cam4.avi_keys.csv')
-    # print(type(csv.iloc[0, :36].values))
-
     cuda = torch.cuda.is_available()
     batch_size = 100
     kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
 
-    transformed_dataset = SkeletonDataset(csv_file='Fall2_Cam5.avi_keys.csv',
+    transformed_dataset = SkeletonDataset(path='/Users/liuliyang/Downloads/nturgb+d_skeletons/',
                                           transform=None)
 
     print(transformed_dataset[0])
