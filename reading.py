@@ -44,7 +44,7 @@ class SkeletonDataset(Dataset):
                             #print(j)
                             #print(numbers)
                             #print(lines[chosen*28+3+j])
-                            print("haha")
+                            print("hehe")
                         packet[j, :, i] = torch.Tensor(numbers)
                     #print(packet)
                     #print(i)
