@@ -50,6 +50,9 @@ RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
 cuda = torch.cuda.is_available()
 
+# 0.25 for cross subject and 0.1 for cross view
+dropout_prob = 0.25
+
 
 class Net(nn.Module):
     def __init__(self, input_size, hidden_size, n_layer=2, model=IndRNN):
@@ -65,7 +68,7 @@ class Net(nn.Module):
             input_size, hidden_size, n_layer, batch_norm=args.batch_norm,
             hidden_max_abs=RECURRENT_MAX, batch_first=True,
             bidirectional=args.bidirectional, recurrent_inits=recurrent_inits,
-            gradient_clip=5, dropout_prob=0.25
+            gradient_clip=5, dropout_prob=dropout_prob
         )
         self.lin = nn.Linear(
             hidden_size * 2 if args.bidirectional else hidden_size, 10)
