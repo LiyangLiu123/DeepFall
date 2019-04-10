@@ -15,7 +15,7 @@ from time import time
 import random
 import os
 
-parser = argparse.ArgumentParser(description='PyTorch IndRNN sequential MNIST test')
+parser = argparse.ArgumentParser(description='PyTorch IndRNN NTU skeleton data')
 # Default parameters taken from https://arxiv.org/abs/1803.04831
 parser.add_argument('--lr', type=float, default=0.0002,
                     help='learning rate (default: 0.0002)')
