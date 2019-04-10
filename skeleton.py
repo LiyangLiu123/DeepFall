@@ -12,7 +12,8 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import argparse
 from time import time
-import csv
+import random
+import os
 
 parser = argparse.ArgumentParser(description='PyTorch IndRNN sequential MNIST test')
 # Default parameters taken from https://arxiv.org/abs/1803.04831
@@ -95,7 +96,7 @@ def main():
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
 
-    transformed_dataset = SkeletonDataset(csv_file='Fall2_Cam5.avi_keys.csv',
+    transformed_dataset = SkeletonDataset(path='/Users/liuliyang/Downloads/nturgb+d_skeletons/',
                                           transform=None)
 
     train_data = DataLoader(transformed_dataset,
@@ -155,20 +156,63 @@ def main():
 
 class SkeletonDataset(Dataset):
 
-    def __init__(self, csv_file, transform=None):
-        with open(csv_file, 'rb') as csvfile:
-            self.landmarks_frame = list(csv.reader(csvfile))
-        self.landmarks_frame = np.delete(self.landmarks_frame, 0, 0)
+    def __init__(self, path, transform=None):
+        self.data = []
+        data = []
+
+        for filename in os.listdir(path):
+            file = open(path + filename, 'r')
+            lines = file.readlines()
+            num_frames = int(lines[0])
+            lines = np.delete(lines, 0)
+            frames = []
+            count = 0
+            while count < num_frames:
+                num_bodies = int(lines[0])
+                if num_bodies is 1:
+                    numbers = []
+                    for j in range(3, 28):
+                        numbers.append(list(map(float, lines[j].split(' ')[:-1])))
+                    frames.append(numbers)
+                    for j in range(0, 28):
+                        lines = np.delete(lines, 0)
+                else:
+                    for j in range(0, num_bodies * 27 + 1):
+                        lines = np.delete(lines, 0)
+                count += 1
+            num_frames = len(frames)
+
+            # choosing 20 frames out of 20 sub-sequences
+            # skip if the file has fewer than 20 frames
+            if num_frames < 20:
+                continue
+            chosen_frames = []
+            sub_length = int(num_frames / 20)
+            idx = 0
+            for i in range(20):
+                if i < num_frames - 20 * sub_length:
+                    chosen = random.randint(idx, idx + sub_length)
+                    idx += sub_length + 1
+                else:
+                    chosen = random.randint(idx, idx + sub_length - 1)
+                    idx += sub_length
+                chosen_frames.append(frames[chosen])
+
+            # get the action class
+            if int(filename[-11:-9]) is 43:
+                target = 1
+            else:
+                target = 0
+            data.append([torch.Tensor(chosen_frames), target])
+            print(filename)
+
         self.transform = transform
 
     def __len__(self):
-        return len(self.landmarks_frame)
+        return len(self.data)
 
     def __getitem__(self, idx):
-        landmarks = self.landmarks_frame[idx, :36].astype(float)
-        landmarks = landmarks.reshape(landmarks.shape[0], 1)
-        target = self.landmarks_frame[idx, -1].astype(int)
-        sample = [torch.Tensor(landmarks), target]
+        sample = self.data[idx]
 
         if self.transform:
             sample = self.transform(sample)

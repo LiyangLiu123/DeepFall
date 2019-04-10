@@ -10,59 +10,61 @@ class SkeletonDataset(Dataset):
 
     def __init__(self, path, transform=None):
         self.data = []
+        data = []
+
         for filename in os.listdir(path):
-            file = open(path+filename, 'r')
+            file = open(path + filename, 'r')
             lines = file.readlines()
             num_frames = int(lines[0])
             lines = np.delete(lines, 0)
+            frames = []
+            count = 0
+            while count < num_frames:
+                num_bodies = int(lines[0])
+                if num_bodies is 1:
+                    numbers = []
+                    for j in range(3, 28):
+                        numbers.append(list(map(float, lines[j].split(' ')[:-1])))
+                    frames.append(numbers)
+                    for j in range(0, 28):
+                        lines = np.delete(lines, 0)
+                else:
+                    for j in range(0, num_bodies * 27 + 1):
+                        lines = np.delete(lines, 0)
+                count += 1
+            num_frames = len(frames)
 
+            # choosing 20 frames out of 20 sub-sequences
+            # skip if the file has fewer than 20 frames
+            if num_frames < 20:
+                continue
+            chosen_frames = []
             sub_length = int(num_frames / 20)
             idx = 0
-            # 25 joints for each frame, each joint have 11 number
-            packet = torch.Tensor(25, 11, 20)
-
-            # divide the frames in 20 sub-sequences with almost the same length (sub_length+1 or sub_length)
-            # and choose one frame randomly form each sub-sequence
             for i in range(20):
                 if i < num_frames - 20 * sub_length:
-                    chosen = random.randint(idx, idx+sub_length+1)
-                    k = 0
-                    while k < chosen:
-                        num_bodies = int(lines[k])
-                        print()
-                        if num_bodies is not 1 and k is not 0:
-                            print(filename)
-                            print(k)
-                            print(int(lines[k]))
-                        k += num_bodies*26+2
-
-                    # one frame contains 28 lines in the file
-                    # start from the 3rd line of each frame
-                    for j in range(25):
-                        numbers = list(map(float, lines[chosen*28+3+j].split(' ')[:-1]))
-                        if len(numbers) is not 11:
-                            #print(filename)
-                            #print(chosen)
-                            #print(j)
-                            #print(numbers)
-                            #print(lines[chosen*28+3+j+1])
-                            print("")
-                        #packet[j, :, i] = torch.Tensor(numbers)
-                    #print(packet)
-                    #print(i)
+                    chosen = random.randint(idx, idx + sub_length)
                     idx += sub_length + 1
                 else:
+                    chosen = random.randint(idx, idx + sub_length - 1)
                     idx += sub_length
+                chosen_frames.append(frames[chosen])
+
+            # get the action class
+            if int(filename[-11:-9]) is 43:
+                target = 1
+            else:
+                target = 0
+            data.append([torch.Tensor(chosen_frames), target])
+            print(filename)
 
         self.transform = transform
 
     def __len__(self):
-        return len(self.landmarks_frame)
+        return len(self.data)
 
     def __getitem__(self, idx):
-        landmarks = self.landmarks_frame[idx, :36].astype(float)
-        target = self.landmarks_frame[idx, -1].astype(int)
-        sample = [torch.Tensor(landmarks), target]
+        sample = self.data[idx]
 
         if self.transform:
             sample = self.transform(sample)
