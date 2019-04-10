@@ -21,6 +21,8 @@ for filename in os.listdir(path):
             numbers = []
             for j in range(3, 28):
                 numbers.append(list(map(float, lines[j].split(' ')[:-1])))
+            numbers = np.array(numbers)
+            numbers = numbers.flatten()
             frames.append(numbers)
             for j in range(0, 28):
                 lines = np.delete(lines, 0)
@@ -52,5 +54,5 @@ for filename in os.listdir(path):
     else:
         target = 0
     data.append([torch.Tensor(chosen_frames), target])
-    print(filename)
-    # raw_input()
+    # print(data)
+    raw_input()

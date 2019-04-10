@@ -7,7 +7,6 @@ from indrnn import IndRNNv2
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision import datasets, transforms
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import argparse
@@ -44,7 +43,8 @@ args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.batch_norm = not args.no_batch_norm
 
-TIME_STEPS = 36 # 36 landmarks
+TIME_STEPS = 275
+# 25*11 landmarks
 RECURRENT_MAX = pow(2, 1 / TIME_STEPS)
 RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
@@ -173,6 +173,7 @@ class SkeletonDataset(Dataset):
                     numbers = []
                     for j in range(3, 28):
                         numbers.append(list(map(float, lines[j].split(' ')[:-1])))
+
                     frames.append(numbers)
                     for j in range(0, 28):
                         lines = np.delete(lines, 0)
