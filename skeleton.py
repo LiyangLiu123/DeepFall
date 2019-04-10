@@ -1,5 +1,5 @@
-"""Module using IndRNNCell to solve the sequential MNIST task.
-The hyper-parameters are taken from that paper as well.
+"""Module using IndRNNCell to solve the skeleton task.
+The hyper-parameters are taken from the paper as well.
 
 """
 from indrnn import IndRNN
