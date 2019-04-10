@@ -173,7 +173,8 @@ class SkeletonDataset(Dataset):
                     numbers = []
                     for j in range(3, 28):
                         numbers.append(list(map(float, lines[j].split(' ')[:-1])))
-
+                    numbers = np.array(numbers)
+                    numbers = numbers.flatten()
                     frames.append(numbers)
                     for j in range(0, 28):
                         lines = np.delete(lines, 0)
