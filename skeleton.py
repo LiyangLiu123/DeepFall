@@ -53,6 +53,12 @@ cuda = torch.cuda.is_available()
 # 0.25 for cross subject and 0.1 for cross view
 dropout_prob = 0.25
 
+cs_train_path = '/Users/liuliyang/Downloads/cs_train/'
+cs_test_path = '/Users/liuliyang/Downloads/cs_test/'
+
+cv_train_path = '/Users/liuliyang/Downloads/cv_train/'
+cv_test_path = '/Users/liuliyang/Downloads/cv_test/'
+
 
 class Net(nn.Module):
     def __init__(self, input_size, hidden_size, n_layer=2, model=IndRNN):
@@ -99,14 +105,12 @@ def main():
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
 
-    transformed_dataset = SkeletonDataset(path='/Users/liuliyang/Downloads/nturgb+d_skeletons/',
-                                          transform=None)
+    transformed_dataset = SkeletonDataset(path=cs_train_path, transform=None)
 
     train_data = DataLoader(transformed_dataset,
                             batch_size=args.batch_size, shuffle=True, drop_last=True, **kwargs)
 
-    transformed_test_dataset = SkeletonDataset(csv_file='Fall3_Cam5.avi_keys.csv',
-                                               transform=None)
+    transformed_test_dataset = SkeletonDataset(path=cs_test_path, transform=None)
 
     test_data = DataLoader(transformed_test_dataset,
                            batch_size=args.batch_size, shuffle=True, drop_last=True, **kwargs)
