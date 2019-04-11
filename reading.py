@@ -10,7 +10,6 @@ class SkeletonDataset(Dataset):
 
     def __init__(self, path, transform=None):
         self.data = []
-        data = []
 
         for filename in os.listdir(path):
             file = open(path + filename, 'r')
@@ -57,7 +56,7 @@ class SkeletonDataset(Dataset):
                 target = 1
             else:
                 target = 0
-            data.append([torch.Tensor(chosen_frames), target])
+            self.data.append([torch.Tensor(chosen_frames), target])
             print(filename)
 
         self.transform = transform
