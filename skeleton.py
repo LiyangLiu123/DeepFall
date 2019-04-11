@@ -43,8 +43,8 @@ args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.batch_norm = not args.no_batch_norm
 
-TIME_STEPS = 275
-# 25*11 landmarks
+TIME_STEPS = 5500
+# 20*25*11 landmarks
 RECURRENT_MAX = pow(2, 1 / TIME_STEPS)
 RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
@@ -123,7 +123,7 @@ def main():
         losses = []
         start = time()
         for data, target in train_data:
-            # print(data)
+            # print(data.shape)
             # print(target)
             if cuda:
                 data, target = data.cuda(), target.cuda()
@@ -218,6 +218,8 @@ class SkeletonDataset(Dataset):
                 target = 1
             else:
                 target = 0
+            chosen_frames = np.array(chosen_frames)
+            chosen_frames = chosen_frames.reshape(chosen_frames.shape[0] * chosen_frames.shape[1], 1)
             self.data.append([torch.Tensor(chosen_frames), target])
             count_of_file += 1
             print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
