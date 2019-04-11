@@ -165,7 +165,6 @@ class SkeletonDataset(Dataset):
 
     def __init__(self, path, transform=None):
         self.data = []
-        data = []
 
         list_of_files = os.listdir(path)
         count_of_file = 0
@@ -214,7 +213,7 @@ class SkeletonDataset(Dataset):
                 target = 1
             else:
                 target = 0
-            data.append([torch.Tensor(chosen_frames), target])
+            self.data.append([torch.Tensor(chosen_frames), target])
             count_of_file += 1
             print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
 
