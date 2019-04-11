@@ -53,8 +53,8 @@ cuda = torch.cuda.is_available()
 # 0.25 for cross subject and 0.1 for cross view
 dropout_prob = 0.25
 
-cs_train_path = '/Users/liuliyang/Downloads/cs_train/'
-cs_test_path = '/Users/liuliyang/Downloads/cs_test/'
+cs_train_path = '/Users/liuliyang/Downloads/train/'
+cs_test_path = '/Users/liuliyang/Downloads/test/'
 
 cv_train_path = '/Users/liuliyang/Downloads/cv_train/'
 cv_test_path = '/Users/liuliyang/Downloads/cv_test/'
@@ -171,6 +171,11 @@ class SkeletonDataset(Dataset):
         for filename in list_of_files:
             file = open(path + filename, 'r')
             lines = file.readlines()
+
+            # in case system files are read in
+            if len(filename) is not 29:
+                continue
+
             num_frames = int(lines[0])
             lines = np.delete(lines, 0)
             frames = []
