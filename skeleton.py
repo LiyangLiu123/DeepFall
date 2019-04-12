@@ -28,13 +28,13 @@ parser.add_argument('--no-batch-norm', action='store_true', default=False,
                     help='disable frame-wise batch normalization after each layer')
 parser.add_argument('--log_epoch', type=int, default=1,
                     help='after how many epochs to report performance')
-parser.add_argument('--log_iteration', type=int, default=-1,
+parser.add_argument('--log_iteration', type=int, default=1,
                     help='after how many iterations to report performance, deactivates with -1 (default: -1)')
 parser.add_argument('--bidirectional', action='store_true', default=False,
                     help='enable bidirectional processing')
 parser.add_argument('--batch-size', type=int, default=128,
                     help='input batch size for training (default: 256)')
-parser.add_argument('--max-steps', type=int, default=50000,
+parser.add_argument('--max-steps', type=int, default=33,
                     help='max iterations of training (default: 10000)')
 parser.add_argument('--model', type=str, default="IndRNN",
                     help='if either IndRNN or LSTM cells should be used for optimization')
@@ -123,8 +123,6 @@ def main():
         losses = []
         start = time()
         for data, target in train_data:
-            # print(data.shape)
-            # print(target)
             if cuda:
                 data, target = data.cuda(), target.cuda()
             model.zero_grad()
@@ -171,6 +169,8 @@ class SkeletonDataset(Dataset):
         for filename in list_of_files:
             # in case system files are read in
             if len(filename) is not 29:
+                count_of_file += 1
+                print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
                 continue
 
             file = open(path + filename, 'r')
@@ -199,6 +199,8 @@ class SkeletonDataset(Dataset):
             # choosing 20 frames out of 20 sub-sequences
             # skip if the file has fewer than 20 frames
             if num_frames < 20:
+                count_of_file += 1
+                print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
                 continue
             chosen_frames = []
             sub_length = int(num_frames / 20)
