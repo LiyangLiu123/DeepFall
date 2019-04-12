@@ -48,7 +48,7 @@ TIME_STEPS = 1500
 RECURRENT_MAX = pow(2, 1 / TIME_STEPS)
 RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
-cuda = torch.cuda.is_available()
+cuda = args.cuda
 
 # 0.25 for cross subject and 0.1 for cross view
 dropout_prob = 0.25
@@ -99,9 +99,6 @@ def main():
     if cuda:
         model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-
-    # load data
-    # train_data, test_data = sequential_MNIST(args.batch_size, cuda=cuda)
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
 
