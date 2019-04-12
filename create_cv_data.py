@@ -10,7 +10,7 @@ count = 0
 
 for filename in filenames:
     camera_angle = int(filename[7:8])
-    if camera_angle is not 3:
+    if camera_angle is not 1:
         copyfile(path + filename, train_path + filename)
     else:
         copyfile(path + filename, test_path + filename)

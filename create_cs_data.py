@@ -10,7 +10,7 @@ count = 0
 
 for filename in filenames:
     subjectid = int(filename[10:12])
-    if subjectid is not 4 and subjectid < 20:
+    if subjectid in [1, 2, 4, 5, 8, 9, 13, 14, 15, 16, 17, 18, 19, 25, 27, 28, 31, 34, 35, 38]:
         copyfile(path + filename, train_path + filename)
     else:
         copyfile(path + filename, test_path + filename)

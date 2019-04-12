@@ -43,8 +43,8 @@ args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.batch_norm = not args.no_batch_norm
 
-TIME_STEPS = 1500
 # 20*25*3 landmarks
+TIME_STEPS = 1500
 RECURRENT_MAX = pow(2, 1 / TIME_STEPS)
 RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
