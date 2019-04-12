@@ -169,13 +169,12 @@ class SkeletonDataset(Dataset):
         list_of_files = os.listdir(path)
         count_of_file = 0
         for filename in list_of_files:
-            file = open(path + filename, 'r')
-            lines = file.readlines()
-
             # in case system files are read in
             if len(filename) is not 29:
                 continue
 
+            file = open(path + filename, 'r')
+            lines = file.readlines()
             num_frames = int(lines[0])
             lines = np.delete(lines, 0)
             frames = []
