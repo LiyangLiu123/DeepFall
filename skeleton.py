@@ -43,8 +43,8 @@ args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.batch_norm = not args.no_batch_norm
 
-TIME_STEPS = 5500
-# 20*25*11 landmarks
+TIME_STEPS = 1500
+# 20*25*3 landmarks
 RECURRENT_MAX = pow(2, 1 / TIME_STEPS)
 RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
@@ -53,8 +53,8 @@ cuda = torch.cuda.is_available()
 # 0.25 for cross subject and 0.1 for cross view
 dropout_prob = 0.25
 
-cs_train_path = '/Users/liuliyang/Downloads/cs_train/'
-cs_test_path = '/Users/liuliyang/Downloads/cs_test/'
+cs_train_path = '/Users/liuliyang/Downloads/train/'
+cs_test_path = '/Users/liuliyang/Downloads/test/'
 
 cv_train_path = '/Users/liuliyang/Downloads/cv_train/'
 cv_test_path = '/Users/liuliyang/Downloads/cv_test/'
@@ -184,7 +184,7 @@ class SkeletonDataset(Dataset):
                 if num_bodies is 1:
                     numbers = []
                     for j in range(3, 28):
-                        numbers.append(list(map(float, lines[j].split(' ')[:-1])))
+                        numbers.append(list(map(float, lines[j].split(' ')[:3])))
                     numbers = np.array(numbers)
                     numbers = numbers.flatten()
                     frames.append(numbers)
