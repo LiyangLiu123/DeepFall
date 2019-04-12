@@ -34,7 +34,7 @@ parser.add_argument('--bidirectional', action='store_true', default=False,
                     help='enable bidirectional processing')
 parser.add_argument('--batch-size', type=int, default=16,
                     help='input batch size for training (default: 256)')
-parser.add_argument('--max-steps', type=int, default=10000,
+parser.add_argument('--max-steps', type=int, default=2500,
                     help='max iterations of training (default: 10000)')
 parser.add_argument('--model', type=str, default="IndRNN",
                     help='if either IndRNN or LSTM cells should be used for optimization')
