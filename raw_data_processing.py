@@ -5,7 +5,7 @@ import csv
 import torch
 from pip._vendor.distlib.compat import raw_input
 
-path = '/Users/liuliyang/Downloads/cs_train/'
+path = '/Users/liuliyang/Downloads/cv_test/'
 
 
 data = []
@@ -106,7 +106,7 @@ for filename in list_of_files:
     chosen_frames = chosen_frames.flatten()
     chosen_frames = np.append(chosen_frames, target)
     # print(chosen_frames)
-    with open('/Users/liuliyang/Downloads/csv/cs_train.csv', 'a') as csvFile:
+    with open('/Users/liuliyang/Downloads/csv/cv_test.csv', 'a') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(chosen_frames)
     csvFile.close()

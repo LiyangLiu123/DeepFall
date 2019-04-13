@@ -11,8 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import argparse
 from time import time
-import random
-import os
+import csv
 
 parser = argparse.ArgumentParser(description='PyTorch IndRNN NTU skeleton data')
 # Default parameters taken from https://arxiv.org/abs/1803.04831
@@ -32,9 +31,9 @@ parser.add_argument('--log_iteration', type=int, default=1,
                     help='after how many iterations to report performance, deactivates with -1 (default: -1)')
 parser.add_argument('--bidirectional', action='store_true', default=False,
                     help='enable bidirectional processing')
-parser.add_argument('--batch-size', type=int, default=16,
+parser.add_argument('--batch-size', type=int, default=128,
                     help='input batch size for training (default: 256)')
-parser.add_argument('--max-steps', type=int, default=2500,
+parser.add_argument('--max-steps', type=int, default=1600,
                     help='max iterations of training (default: 10000)')
 parser.add_argument('--model', type=str, default="IndRNN",
                     help='if either IndRNN or LSTM cells should be used for optimization')
@@ -90,9 +89,9 @@ class Net(nn.Module):
 def main():
     # build model
     if args.model.lower() == "indrnn":
-        model = Net(1500, args.hidden_size, args.n_layer)
+        model = Net(75, args.hidden_size, args.n_layer)
     elif args.model.lower() == "indrnnv2":
-        model = Net(1500, args.hidden_size, args.n_layer, IndRNNv2)
+        model = Net(75, args.hidden_size, args.n_layer, IndRNNv2)
     else:
         raise Exception("unsupported cell model")
 
@@ -161,7 +160,17 @@ class SkeletonDataset(Dataset):
     def __init__(self, csv_file, transform=None):
         self.data = []
 
+        row_count = 0
 
+        with open(csv_file, 'r') as csvFile:
+            reader = csv.reader(csvFile)
+            for row in reader:
+                numbers = map(float, row)
+                self.data.append(numbers)
+                row_count += 1
+                print("{} rows completed".format(row_count))
+
+        csvFile.close()
 
         self.transform = transform
 
@@ -169,7 +178,11 @@ class SkeletonDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        sample = self.data[idx]
+        frames = np.array(self.data[idx][:-1])
+        target = self.data[idx][-1]
+        frames = frames.reshape(20, 75)
+
+        sample = [torch.Tensor(frames), int(target)]
 
         if self.transform:
             sample = self.transform(sample)
