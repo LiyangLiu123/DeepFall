@@ -4,60 +4,22 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import os
 import random
+import csv
 
 
 class SkeletonDataset(Dataset):
 
-    def __init__(self, path, transform=None):
+    def __init__(self, csv_file, transform=None):
         self.data = []
 
-        for filename in os.listdir(path):
-            file = open(path + filename, 'r')
-            lines = file.readlines()
-            num_frames = int(lines[0])
-            lines = np.delete(lines, 0)
-            frames = []
-            count = 0
-            while count < num_frames:
-                num_bodies = int(lines[0])
-                if num_bodies is 1:
-                    numbers = []
-                    for j in range(3, 28):
-                        numbers.append(list(map(float, lines[j].split(' ')[:-1])))
-                    numbers = np.array(numbers)
-                    numbers = numbers.flatten()
-                    frames.append(numbers)
-                    for j in range(0, 28):
-                        lines = np.delete(lines, 0)
-                else:
-                    for j in range(0, num_bodies * 27 + 1):
-                        lines = np.delete(lines, 0)
-                count += 1
-            num_frames = len(frames)
+        import csv
 
-            # choosing 20 frames out of 20 sub-sequences
-            # skip if the file has fewer than 20 frames
-            if num_frames < 20:
-                continue
-            chosen_frames = []
-            sub_length = int(num_frames / 20)
-            idx = 0
-            for i in range(20):
-                if i < num_frames - 20 * sub_length:
-                    chosen = random.randint(idx, idx + sub_length)
-                    idx += sub_length + 1
-                else:
-                    chosen = random.randint(idx, idx + sub_length - 1)
-                    idx += sub_length
-                chosen_frames.append(frames[chosen])
+        with open(csv_file, 'r') as csvFile:
+            reader = csv.reader(csvFile)
+            for row in reader:
+                print(row)
 
-            # get the action class
-            if int(filename[-11:-9]) is 43:
-                target = 1
-            else:
-                target = 0
-            self.data.append([torch.Tensor(chosen_frames), target])
-            print(filename)
+        csvFile.close()
 
         self.transform = transform
 
@@ -78,7 +40,7 @@ def main():
     batch_size = 100
     kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
 
-    transformed_dataset = SkeletonDataset(path='/Users/liuliyang/Downloads/nturgb+d_skeletons/',
+    transformed_dataset = SkeletonDataset(csv_file='/Users/liuliyang/Downloads/csv/cs_train.csv',
                                           transform=None)
 
     print(transformed_dataset[0])

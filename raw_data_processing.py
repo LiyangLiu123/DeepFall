@@ -13,6 +13,7 @@ data = []
 list_of_files = os.listdir(path)
 count_of_file = 0
 for filename in list_of_files:
+    print(filename)
     # in case system files are read in
     if len(filename) is not 29:
         count_of_file += 1
@@ -27,6 +28,12 @@ for filename in list_of_files:
     count = 0
     while count < num_frames:
         num_bodies = int(lines[0])
+        if num_bodies >= 4:
+            raw_input()
+        if num_bodies is 0:
+            lines = np.delete(lines, 0)
+            count += 1
+            continue
         if num_bodies is 1:
             numbers = []
             for j in range(3, 28):
@@ -42,20 +49,30 @@ for filename in list_of_files:
             numbers = []
             numbers1 = []
             numbers2 = []
+            numbers3 = []
             for j in range(3, 28):
                 numbers1.append(list(map(float, lines[j].split(' ')[:3])))
             for j in range(30, 55):
                 numbers2.append(list(map(float, lines[j].split(' ')[:3])))
 
-            if sum(map(sum,numbers1)) >= sum(map(sum,numbers2)):
+            if num_bodies is 3:
+                for j in range(57, 82):
+                    numbers3.append(list(map(float, lines[j].split(' ')[:3])))
+
+            if sum(map(sum, numbers1)) >= sum(map(sum, numbers2)):
                 numbers = numbers1
             else:
                 numbers = numbers2
+
+            if num_bodies is 3:
+                if sum(map(sum, numbers3)) >= sum(map(sum, numbers)):
+                    numbers = numbers3
+
             numbers = np.array(numbers)
             numbers = numbers.flatten()
 
             frames.append(numbers)
-            for j in range(0, 55):
+            for j in range(0, num_bodies*27+1):
                 lines = np.delete(lines, 0)
         count += 1
 
@@ -87,7 +104,9 @@ for filename in list_of_files:
     chosen_frames = np.array(chosen_frames)
     # chosen_frames = chosen_frames.reshape(chosen_frames.shape[0] * chosen_frames.shape[1], 1)
     chosen_frames = chosen_frames.flatten()
-    with open('/Users/liuliyang/Downloads/cs_train_csv/data.csv', 'a') as csvFile:
+    chosen_frames = np.append(chosen_frames, target)
+    # print(chosen_frames)
+    with open('/Users/liuliyang/Downloads/csv/cs_train.csv', 'a') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(chosen_frames)
     csvFile.close()
