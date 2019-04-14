@@ -260,7 +260,7 @@ class IndRNN(nn.Module):
             x_T = torch.unbind(x, time_index)
             time_frame = len(x_T)
             for t in range(time_frame):
-                hx_cell = cell(self.dropout(x_T[t]), self.dropout(hx_cell))
+                hx_cell = cell(x_T[t], hx_cell)
                 outputs.append(hx_cell)
             x_cell = torch.stack(outputs, time_index)
             if self.bidirectional:
@@ -281,6 +281,7 @@ class IndRNN(nn.Module):
                 else:
                     x = self.bns[i](
                         x.permute(batch_index, 2, time_index).contiguous()).permute(2, 0, 1)
+            x = self.dropout(x)
             i += 1
         return x.squeeze(2), torch.cat(hiddens, -1)
 
@@ -472,8 +473,8 @@ class IndRNNv2(nn.Module):
             lin = torch.unbind(lin, 2)
             recurrent_h = self.cells_recurrent[i]
             for t in range(frame_size):
-                hx = self.activation(self.dropout(lin[t]) +
-                                     torch.mul(recurrent_h, self.dropout(hx)))
+                hx = self.activation(lin[t] +
+                                     torch.mul(recurrent_h, hx))
                 outputs.append(hx)
             x = torch.stack(outputs, 2)
             hiddens.append(hx)

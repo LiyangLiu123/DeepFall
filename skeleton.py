@@ -33,7 +33,7 @@ parser.add_argument('--bidirectional', action='store_true', default=False,
                     help='enable bidirectional processing')
 parser.add_argument('--batch-size', type=int, default=256,
                     help='input batch size for training (default: 256)')
-parser.add_argument('--max-steps', type=int, default=10000,
+parser.add_argument('--max-steps', type=int, default=50000,
                     help='max iterations of training (default: 10000)')
 parser.add_argument('--model', type=str, default="IndRNN",
                     help='if either IndRNN or LSTM cells should be used for optimization')
@@ -42,8 +42,7 @@ args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.batch_norm = not args.no_batch_norm
 
-# 20*25*3 landmarks
-TIME_STEPS = 1500
+TIME_STEPS = 20
 RECURRENT_MAX = pow(2, 1 / TIME_STEPS)
 RECURRENT_MIN = pow(1 / 2, 1 / TIME_STEPS)
 
@@ -89,9 +88,9 @@ class Net(nn.Module):
 def main():
     # build model
     if args.model.lower() == "indrnn":
-        model = Net(1500, args.hidden_size, args.n_layer)
+        model = Net(75, args.hidden_size, args.n_layer)
     elif args.model.lower() == "indrnnv2":
-        model = Net(1500, args.hidden_size, args.n_layer, IndRNNv2)
+        model = Net(75, args.hidden_size, args.n_layer, IndRNNv2)
     else:
         raise Exception("unsupported cell model")
 
@@ -180,7 +179,7 @@ class SkeletonDataset(Dataset):
     def __getitem__(self, idx):
         frames = np.array(self.data[idx][:-1])
         target = self.data[idx][-1]
-        frames = frames.reshape(1, 1500)
+        frames = frames.reshape(20, 75)
 
         sample = [torch.Tensor(frames), int(target)-1]
 
