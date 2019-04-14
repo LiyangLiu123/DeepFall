@@ -2,10 +2,9 @@ import os
 import numpy as np
 import random
 import csv
-import torch
 from pip._vendor.distlib.compat import raw_input
 
-path = '/Users/liuliyang/Downloads/cv_test/'
+path = '/Users/liuliyang/Downloads/cv_train/'
 
 
 data = []
@@ -97,16 +96,13 @@ for filename in list_of_files:
         chosen_frames.append(frames[chosen])
 
     # get the action class
-    if int(filename[-11:-9]) is 43:
-        target = 1
-    else:
-        target = 0
+    target = int(filename[-11:-9])
     chosen_frames = np.array(chosen_frames)
     # chosen_frames = chosen_frames.reshape(chosen_frames.shape[0] * chosen_frames.shape[1], 1)
     chosen_frames = chosen_frames.flatten()
     chosen_frames = np.append(chosen_frames, target)
     # print(chosen_frames)
-    with open('/Users/liuliyang/Downloads/csv/cv_test.csv', 'a') as csvFile:
+    with open('/Users/liuliyang/Downloads/csv/cv_train.csv', 'a') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(chosen_frames)
     csvFile.close()
@@ -114,4 +110,4 @@ for filename in list_of_files:
     count_of_file += 1
     print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
 
-    # raw_input()
+    #raw_input()

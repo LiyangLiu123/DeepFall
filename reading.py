@@ -3,8 +3,6 @@ import torch
 from pip._vendor.distlib.compat import raw_input
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
-import os
-import random
 import csv
 
 
@@ -35,7 +33,7 @@ class SkeletonDataset(Dataset):
         target = self.data[idx][-1]
         frames = frames.reshape(20, 75)
 
-        sample = [torch.Tensor(frames), int(target)]
+        sample = [torch.Tensor(frames), int(target)-1]
 
         if self.transform:
             sample = self.transform(sample)
@@ -54,8 +52,9 @@ def main():
     train_loader = DataLoader(transformed_dataset,
                               batch_size=batch_size, shuffle=True, drop_last=True, **kwargs)
     for idx, sample in enumerate(train_loader):
-        print("haha")
-        #print(sample[1])
+        for num in sample[1]:
+            if num > 59 or num < 0:
+                raw_input()
 
 
 if __name__ == "__main__":

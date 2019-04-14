@@ -31,9 +31,9 @@ parser.add_argument('--log_iteration', type=int, default=1,
                     help='after how many iterations to report performance, deactivates with -1 (default: -1)')
 parser.add_argument('--bidirectional', action='store_true', default=False,
                     help='enable bidirectional processing')
-parser.add_argument('--batch-size', type=int, default=128,
+parser.add_argument('--batch-size', type=int, default=256,
                     help='input batch size for training (default: 256)')
-parser.add_argument('--max-steps', type=int, default=1600,
+parser.add_argument('--max-steps', type=int, default=10000,
                     help='max iterations of training (default: 10000)')
 parser.add_argument('--model', type=str, default="IndRNN",
                     help='if either IndRNN or LSTM cells should be used for optimization')
@@ -76,7 +76,7 @@ class Net(nn.Module):
             gradient_clip=5, dropout_prob=dropout_prob
         )
         self.lin = nn.Linear(
-            hidden_size * 2 if args.bidirectional else hidden_size, 10)
+            hidden_size * 2 if args.bidirectional else hidden_size, 60)
         self.lin.bias.data.fill_(.1)
         self.lin.weight.data.normal_(0, .01)
 
@@ -182,7 +182,7 @@ class SkeletonDataset(Dataset):
         target = self.data[idx][-1]
         frames = frames.reshape(20, 75)
 
-        sample = [torch.Tensor(frames), int(target)]
+        sample = [torch.Tensor(frames), int(target)-1]
 
         if self.transform:
             sample = self.transform(sample)
