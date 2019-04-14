@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='PyTorch IndRNN NTU skeleton data')
 # Default parameters taken from https://arxiv.org/abs/1803.04831
 parser.add_argument('--lr', type=float, default=0.0002,
                     help='learning rate (default: 0.0002)')
-parser.add_argument('--n-layer', type=int, default=4,
+parser.add_argument('--n-layer', type=int, default=6,
                     help='number of layer of IndRNN (default: 6)')
 parser.add_argument('--hidden_size', type=int, default=512,
                     help='number of hidden units in one IndRNN layer(default: 128)')
@@ -89,9 +89,9 @@ class Net(nn.Module):
 def main():
     # build model
     if args.model.lower() == "indrnn":
-        model = Net(75, args.hidden_size, args.n_layer)
+        model = Net(1500, args.hidden_size, args.n_layer)
     elif args.model.lower() == "indrnnv2":
-        model = Net(75, args.hidden_size, args.n_layer, IndRNNv2)
+        model = Net(1500, args.hidden_size, args.n_layer, IndRNNv2)
     else:
         raise Exception("unsupported cell model")
 
@@ -180,7 +180,7 @@ class SkeletonDataset(Dataset):
     def __getitem__(self, idx):
         frames = np.array(self.data[idx][:-1])
         target = self.data[idx][-1]
-        frames = frames.reshape(20, 75)
+        frames = frames.reshape(1, 1500)
 
         sample = [torch.Tensor(frames), int(target)-1]
 
