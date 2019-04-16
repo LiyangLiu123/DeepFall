@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='PyTorch IndRNN NTU skeleton data')
 # Default parameters taken from https://arxiv.org/abs/1803.04831
 parser.add_argument('--lr', type=float, default=0.0002,
                     help='learning rate (default: 0.0002)')
-parser.add_argument('--n-layer', type=int, default=6,
+parser.add_argument('--n-layer', type=int, default=4,
                     help='number of layer of IndRNN (default: 6)')
 parser.add_argument('--hidden_size', type=int, default=512,
                     help='number of hidden units in one IndRNN layer(default: 128)')
