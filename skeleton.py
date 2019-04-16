@@ -27,13 +27,13 @@ parser.add_argument('--no-batch-norm', action='store_true', default=False,
                     help='disable frame-wise batch normalization after each layer')
 parser.add_argument('--log_epoch', type=int, default=1,
                     help='after how many epochs to report performance')
-parser.add_argument('--log_iteration', type=int, default=1,
+parser.add_argument('--log_iteration', type=int, default=-1,
                     help='after how many iterations to report performance, deactivates with -1 (default: -1)')
 parser.add_argument('--bidirectional', action='store_true', default=False,
                     help='enable bidirectional processing')
-parser.add_argument('--batch-size', type=int, default=256,
+parser.add_argument('--batch-size', type=int, default=128,
                     help='input batch size for training (default: 256)')
-parser.add_argument('--max-steps', type=int, default=50000,
+parser.add_argument('--max-steps', type=int, default=10000,
                     help='max iterations of training (default: 10000)')
 parser.add_argument('--model', type=str, default="IndRNN",
                     help='if either IndRNN or LSTM cells should be used for optimization')
@@ -98,7 +98,7 @@ def main():
         model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
-    kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
+    kwargs = {'num_workers': 8, 'pin_memory': True} if cuda else {}
 
     transformed_dataset = SkeletonDataset(csv_file=cs_train_csv, transform=None)
 
@@ -138,20 +138,20 @@ def main():
             print(
                 "Epoch {} cross_entropy {} ({} sec.)".format(
                     epochs, np.mean(losses), time() - start))
+            # get test error
+            model.eval()
+            correct = 0
+            for data, target in test_data:
+                if cuda:
+                    data, target = data.cuda(), target.cuda()
+                out = model(data)
+                pred = out.data.max(1, keepdim=True)[1]
+                correct += pred.eq(target.data.view_as(pred)).cpu().sum()
+            print(
+                "Test accuracy:: {:.4f}".format(
+                    100. * correct / len(test_data.dataset)))
+            model.train()
         epochs += 1
-
-    # get test error
-    model.eval()
-    correct = 0
-    for data, target in test_data:
-        if cuda:
-            data, target = data.cuda(), target.cuda()
-        out = model(data)
-        pred = out.data.max(1, keepdim=True)[1]
-        correct += pred.eq(target.data.view_as(pred)).cpu().sum()
-    print(
-        "Test accuracy:: {:.4f}".format(
-            100. * correct / len(test_data.dataset)))
 
 
 class SkeletonDataset(Dataset):

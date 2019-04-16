@@ -44,7 +44,7 @@ for filename in list_of_files:
             for j in range(0, 28):
                 lines = np.delete(lines, 0)
         else:
-            # check which is main actor when having two skeletons detected
+            # check which is main actor when having two or three skeletons detected
             numbers = []
             numbers1 = []
             numbers2 = []

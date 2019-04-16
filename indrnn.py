@@ -281,7 +281,10 @@ class IndRNN(nn.Module):
                 else:
                     x = self.bns[i](
                         x.permute(batch_index, 2, time_index).contiguous()).permute(2, 0, 1)
+
+            # The dropout
             x = self.dropout(x)
+
             i += 1
         return x.squeeze(2), torch.cat(hiddens, -1)
 
