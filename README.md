@@ -10,7 +10,7 @@ np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls.npy', data)
 np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls_len.npy', lens)
 np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls_label.npy', targets_2cls)
 ```
-You can also find the comfusion matrices of 60 classes in NTU folder as numpy arrays, named 60cls_cs_cm.npy and 60cls_cv_cm.npy.
+You can also find the confusion matrices of 60 classes in NTU folder as numpy arrays, named 60cls_cs_cm.npy and 60cls_cv_cm.npy.
 ## Check code on high quality fall simulation data in folder high_quality_sim.
 You have to download the videos from https://iiw.kuleuven.be/onderzoek/advise/datasets#High%20Quality%20Fall%20Simulation%20Data and use OpenPose to transform the videos into COCO key points with 18 joints before using the codes here.
 
