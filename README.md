@@ -1,6 +1,6 @@
 # DeepFall
 ## The original code
-The original version code is available at https://github.com/Sunnydreamrain/IndRNN_pytorch.  
+The original version of the code is available at https://github.com/Sunnydreamrain/IndRNN_pytorch.  
 More details can be found there.
 ## Check code on NTU skeleton data in folder NTU.
 Download NTU dataset from http://rose1.ntu.edu.sg/Datasets/actionRecognition.asp. Note that permission has to be apllied first.
