@@ -18,6 +18,7 @@ for filename in list_of_files:
         print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
         continue
 
+    #fall label is 43, which makes it 42 in the array
     target = int(filename[-11:-9]) - 1
     if target is not 42:
         x = random.randint(1, 1000)
@@ -84,6 +85,7 @@ for filename in list_of_files:
         target_2cls = 0
     targets_2cls.append(target_2cls)
     data.append(np.array(frames))
+    targets.append(target)
     #print(np.array(frames).shape)
     count_of_file += 1
     print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
