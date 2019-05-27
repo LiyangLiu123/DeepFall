@@ -8,4 +8,6 @@ np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls_len.npy', lens)
 np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls_label.npy', targets_2cls)
 ```
 ## Check code on high quality fall simulation data in folder high_quality_sim.
+You have to download the videos from https://iiw.kuleuven.be/onderzoek/advise/datasets#High%20Quality%20Fall%20Simulation%20Data and use OpenPose to transform the videos into COCO key points with 18 joints before using the codes here.  
+Use process.py and gen_len.py to generate necessary numpy arrays to feed in high_quality_simulation.ipynb. Modify process.py to generate cross-scenario or cross-view evaluation. After every modification you have to run both process.py and gen_len.py again.  
 
