@@ -3,7 +3,7 @@ import numpy as np
 import random
 from pip._vendor.distlib.compat import raw_input
 
-path = '/Users/liuliyang/Downloads/cs_test/'
+path = '/Users/liuliyang/Downloads/cs_train/'
 
 list_of_files = os.listdir(path)
 count_of_file = 0
@@ -95,7 +95,7 @@ for filename in list_of_files:
     #raw_input()
 
 
-np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls.npy', data)
-np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls_len.npy', lens)
-np.save('/Users/liuliyang/Downloads/ndarray/2cls/test_ntus_2cls_label.npy', targets_2cls)
+np.save('/Users/liuliyang/Downloads/ndarray/2cls/train_ntus_2cls.npy', data)
+np.save('/Users/liuliyang/Downloads/ndarray/2cls/train_ntus_2cls_len.npy', lens)
+np.save('/Users/liuliyang/Downloads/ndarray/2cls/train_ntus_2cls_label.npy', targets_2cls)
 
