@@ -18,17 +18,7 @@ for filename in list_of_files:
         print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
         continue
 
-    #fall label is 43, which makes it 42 in the array
     target = int(filename[-11:-9]) - 1
-    if target is not 42:
-        x = random.randint(1, 1000)
-        if x >= 17:
-            # raw_input()
-            count_of_file += 1
-            print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
-            continue
-        # raw_input()
-
 
     file = open(path + filename, 'r')
     lines = file.readlines()
@@ -75,17 +65,19 @@ for filename in list_of_files:
         print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
         continue
 
-    lens.append(num_frames)
-
     # get the action class
     if int(filename[-11:-9]) is 43:
         target_2cls = 1
+        for _ in range(25):
+            targets_2cls.append(target_2cls)
+            lens.append(num_frames)
+            data.append(np.array(frames))
         # raw_input()
     else:
         target_2cls = 0
-    targets_2cls.append(target_2cls)
-    data.append(np.array(frames))
-    targets.append(target)
+        targets_2cls.append(target_2cls)
+        lens.append(num_frames)
+        data.append(np.array(frames))
     #print(np.array(frames).shape)
     count_of_file += 1
     print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
@@ -95,7 +87,7 @@ for filename in list_of_files:
     #raw_input()
 
 
-np.save('/Users/liuliyang/Downloads/ndarray/2cls/train_ntus_2cls.npy', data)
-np.save('/Users/liuliyang/Downloads/ndarray/2cls/train_ntus_2cls_len.npy', lens)
-np.save('/Users/liuliyang/Downloads/ndarray/2cls/train_ntus_2cls_label.npy', targets_2cls)
+np.save('/Users/liuliyang/Downloads/ndarray/up_sampling_2cls/train_ntus_2cls.npy', data)
+np.save('/Users/liuliyang/Downloads/ndarray/up_sampling_2cls/train_ntus_2cls_len.npy', lens)
+np.save('/Users/liuliyang/Downloads/ndarray/up_sampling_2cls/train_ntus_2cls_label.npy', targets_2cls)
 
