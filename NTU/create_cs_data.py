@@ -15,4 +15,4 @@ for filename in filenames:
     else:
         copyfile(path + filename, test_path + filename)
     count += 1
-    print('{}/{} completed\n'.format(count, len(filenames)))
+    print('{}/{} completed'.format(count, len(filenames)))
