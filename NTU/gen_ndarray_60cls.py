@@ -74,6 +74,7 @@ for filename in list_of_files:
     count_of_file += 1
     print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
 
+os.mkdir("./_60cls")
 
 np.save('./_60cls/'+path[2:-1]+'_60cls.npy', data)
 np.save('./_60cls/'+path[2:-1]+'_60cls_len.npy', lens)

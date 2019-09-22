@@ -4,3 +4,7 @@ NTU/cs_train/
 NTU/cv_test/
 NTU/cv_train/
 NTU/nturgb+d_skeletons/
+.DS_Store
+NTU/.DS_Store
+NTU/_60cls/
+NTU/up_sampling_2cls/

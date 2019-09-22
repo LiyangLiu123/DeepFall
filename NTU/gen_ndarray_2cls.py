@@ -84,6 +84,7 @@ for filename in list_of_files:
     count_of_file += 1
     print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
 
+os.mkdir("./up_sampling_2cls")
 
 np.save('./up_sampling_2cls/'+path[2:-1]+'_2cls.npy', data)
 np.save('./up_sampling_2cls/'+path[2:-1]+'_2cls_len.npy', lens)

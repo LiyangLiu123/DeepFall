@@ -5,6 +5,9 @@ path = './nturgb+d_skeletons/'
 train_path = './cs_train/'
 test_path = './cs_test/'
 
+os.mkdir(train_path)
+os.mkdir(test_path)
+
 filenames = os.listdir(path)
 count = 0
 
