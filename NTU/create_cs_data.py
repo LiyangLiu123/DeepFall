@@ -1,9 +1,9 @@
 import os
 from shutil import copyfile
 
-path = '/Users/liuliyang/Downloads/nturgb+d_skeletons/'
-train_path = '/Users/liuliyang/Downloads/cs_train/'
-test_path = '/Users/liuliyang/Downloads/cs_test/'
+path = './nturgb+d_skeletons/'
+train_path = './cs_train/'
+test_path = './cs_test/'
 
 filenames = os.listdir(path)
 count = 0
