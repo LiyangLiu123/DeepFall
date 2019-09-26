@@ -23,7 +23,7 @@ for filename in list_of_files:
 
     target = int(filename[-11:-9]) - 1
 
-    file = open(path + filename, 'r')
+    file = open(path + '/' + filename, 'r')
     lines = file.readlines()
     num_frames = int(lines[0])
     lines = np.delete(lines, 0)
