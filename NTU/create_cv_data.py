@@ -18,4 +18,4 @@ for filename in filenames:
     else:
         copyfile(path + filename, test_path + filename)
     count += 1
-    print('{}/{} completed'.format(count, len(filenames)))
+    print('create cv data: {}/{} completed'.format(count, len(filenames)))

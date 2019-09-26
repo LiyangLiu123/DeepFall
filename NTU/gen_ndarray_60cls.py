@@ -1,7 +1,13 @@
 import os
 import numpy as np
+import argparse
 
-path = './cs_train/'  # fill './cs_train', './cs_test', './cv_train' or './cv_test' here
+parser = argparse.ArgumentParser(description='Generate npy')
+parser.add_argument('path', help='the path to generate npy')
+
+args = parser.parse_args()
+
+path = args.path  # fill './cs_train', './cs_test', './cv_train' or './cv_test' here
 
 list_of_files = os.listdir(path)
 count_of_file = 0
@@ -12,7 +18,7 @@ for filename in list_of_files:
     # in case system files are read in
     if len(filename) is not 29:
         count_of_file += 1
-        print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
+        print('gen_60cls '+path+' : {}/{} files reading completed'.format(count_of_file, len(list_of_files)))
         continue
 
     target = int(filename[-11:-9]) - 1
@@ -64,7 +70,7 @@ for filename in list_of_files:
 
     if num_frames is 0:
         count_of_file += 1
-        print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
+        print('gen_60cls '+path+' : {}/{} files reading completed'.format(count_of_file, len(list_of_files)))
         continue
 
     # get the action class
@@ -72,7 +78,7 @@ for filename in list_of_files:
     lens.append(num_frames)
     data.append(np.array(frames))
     count_of_file += 1
-    print('{}/{} files reading completed'.format(count_of_file, len(list_of_files)))
+    print('gen_60cls '+path+' : {}/{} files reading completed'.format(count_of_file, len(list_of_files)))
 
 os.mkdir("./_60cls")
 
