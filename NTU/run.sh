@@ -1,3 +1,5 @@
+python3 delete_missing_samples.py
+
 python3 create_cs_data.py
 python3 create_cv_data.py
 

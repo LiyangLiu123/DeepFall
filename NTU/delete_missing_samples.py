@@ -10,4 +10,4 @@ for line in lines:
     names.append(line[:-1])
 
 for name in names:
-    os.remove("/Users/liuliyang/Downloads/nturgb+d_skeletons/"+name+".skeleton")
+    os.remove("./nturgb+d_skeletons/"+name+".skeleton")
